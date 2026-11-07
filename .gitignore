@@ -3,3 +3,4 @@ dist/
 AGENTS.md
 .env
 .env.local
+.dev.vars*
