@@ -98,14 +98,13 @@ export function Contact() {
               <i className="asterisk text-[14px] not-italic opacity-90">*</i>
             </legend>
             <div className="flex flex-wrap gap-[10px]">
-              {interests.map((interest, index) => (
+              {interests.map((interest) => (
                 <label key={interest} className={chipClass}>
                   <input
                     className="peer sr-only"
                     type="checkbox"
                     name="Interest"
                     value={interest}
-                    defaultChecked={index === 0}
                   />
                   {interest}
                 </label>
