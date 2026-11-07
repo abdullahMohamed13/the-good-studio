@@ -87,76 +87,81 @@ export function ChatbotOrb() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 max-[700px]:bottom-4 max-[700px]:right-4">
-      {isOpen && (
-        <div
-          className="mb-3 flex max-h-[460px] w-[320px] flex-col border border-dashed border-[var(--color-primary)] bg-[var(--color-background)] text-[var(--color-primary)] shadow-[6px_6px_0_var(--color-primary)] max-[430px]:w-[calc(100vw-32px)]"
-          role="dialog"
-          aria-label="Good Studio chatbot"
-        >
-          <div className="flex items-start justify-between border-b border-dashed border-[var(--color-primary)] p-4">
-            <div>
-              <span className="font-mono text-[9px] uppercase text-[var(--color-secondary)]">
-                GOOD BOT / LIVE
-              </span>
-              <p className="mt-1 font-serif text-lg leading-[1.2]">
-                Ask the studio.
-              </p>
-            </div>
-            <button
-              className="font-mono text-xs text-[var(--color-accent)]"
-              type="button"
-              onClick={() => setIsOpen(false)}
-              aria-label="Close chatbot"
-            >
-              ×
-            </button>
+    <div className="fixed inset-auto bottom-6 right-6 z-40 max-[700px]:bottom-4 max-[700px]:right-4">
+      <div
+        className={`absolute bottom-[calc(100%+12px)] right-0 flex max-h-[460px] w-[320px] origin-bottom-right flex-col border border-dashed border-[var(--color-primary)] bg-[var(--color-background)] text-[var(--color-primary)] shadow-[6px_6px_0_var(--color-primary)] transition-[opacity,transform,visibility] duration-300 ease-out max-[430px]:w-[calc(100vw-32px)] ${
+          isOpen
+            ? "visible translate-y-0 scale-100 opacity-100"
+            : "invisible pointer-events-none translate-y-3 scale-95 opacity-0"
+        }`}
+        role="dialog"
+        aria-label="Good Studio chatbot"
+        aria-hidden={!isOpen}
+      >
+        <div className="flex items-start justify-between border-b border-dashed border-[var(--color-primary)] p-4">
+          <div>
+            <span className="font-mono text-[9px] uppercase text-[var(--color-secondary)]">
+              GOOD BOT / LIVE
+            </span>
+            <p className="mt-1 font-serif text-lg leading-[1.2]">
+              Ask the studio.
+            </p>
           </div>
-
-          <div className="flex min-h-[150px] flex-col gap-3 overflow-y-auto p-4 font-mono text-[10px] leading-[1.45]">
-            {messages.map((message, index) => (
-              <p
-                className={
-                  message.role === "user"
-                    ? "self-end border border-dashed border-[var(--color-accent)] px-2 py-1 text-right"
-                    : "max-w-[245px] whitespace-pre-line border-l-2 border-[var(--color-secondary)] pl-2"
-                }
-                key={`${message.role}-${index}`}
-              >
-                {message.role === "assistant"
-                  ? formatAssistantText(message.content)
-                  : message.content}
-              </p>
-            ))}
-            {isLoading && (
-              <p className="border-l-2 border-[var(--color-secondary)] pl-2 opacity-60">
-                The orb is thinking…
-              </p>
-            )}
-          </div>
-
-          <form
-            className="flex border-t border-dashed border-[var(--color-primary)] p-2"
-            onSubmit={sendMessage}
+          <button
+            className="font-mono text-xs text-[var(--color-accent)]"
+            type="button"
+            onClick={() => setIsOpen(false)}
+            tabIndex={isOpen ? 0 : -1}
+            aria-label="Close chatbot"
           >
-            <input
-              className="min-w-0 flex-1 bg-transparent px-2 py-2 font-mono text-[10px] outline-none placeholder:text-[var(--color-secondary)]"
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              placeholder="Ask something good…"
-              maxLength={1000}
-              aria-label="Chat message"
-            />
-            <button
-              className="px-2 font-mono text-[10px] uppercase text-[var(--color-accent)] disabled:opacity-40"
-              type="submit"
-              disabled={isLoading || !input.trim()}
-            >
-              Send ↗
-            </button>
-          </form>
+            ×
+          </button>
         </div>
-      )}
+
+        <div className="flex min-h-[150px] flex-col gap-3 overflow-y-auto p-4 font-mono text-[10px] leading-[1.45]">
+          {messages.map((message, index) => (
+            <p
+              className={
+                message.role === "user"
+                  ? "self-end border border-dashed border-[var(--color-accent)] px-2 py-1 text-right"
+                  : "max-w-[245px] whitespace-pre-line border-l-2 border-[var(--color-secondary)] pl-2"
+              }
+              key={`${message.role}-${index}`}
+            >
+              {message.role === "assistant"
+                ? formatAssistantText(message.content)
+                : message.content}
+            </p>
+          ))}
+          {isLoading && (
+            <p className="border-l-2 border-[var(--color-secondary)] pl-2 opacity-60">
+              The orb is thinking…
+            </p>
+          )}
+        </div>
+
+        <form
+          className="flex border-t border-dashed border-[var(--color-primary)] p-2"
+          onSubmit={sendMessage}
+        >
+          <input
+            className="min-w-0 flex-1 bg-transparent px-2 py-2 font-mono text-[10px] outline-none placeholder:text-[var(--color-secondary)]"
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            placeholder="Ask something good…"
+            maxLength={1000}
+            disabled={!isOpen}
+            aria-label="Chat message"
+          />
+          <button
+            className="px-2 font-mono text-[10px] uppercase text-[var(--color-accent)] disabled:opacity-40"
+            type="submit"
+            disabled={!isOpen || isLoading || !input.trim()}
+          >
+            Send ↗
+          </button>
+        </form>
+      </div>
       <button
         className="group relative block rounded-full border-0 bg-transparent p-0"
         type="button"
