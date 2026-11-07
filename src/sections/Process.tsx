@@ -14,7 +14,7 @@ const processItems = processSteps.map((step, index) => ({
 export function Process() {
   return (
     <section
-      className="bg-[var(--color-accent)] px-[8.5%] py-[30px] text-[var(--color-primary)] selection:bg-[var(--color-primary)] selection:text-[var(--color-background)] max-[700px]:px-[7%] max-[700px]:py-[75px]"
+      className="bg-[var(--color-accent)] px-[8.5%] py-[30px] text-[var(--color-primary)] selection:bg-[var(--color-primary)] selection:text-[var(--color-background)] max-[700px]:px-[7%]"
       id="process"
     >
       <div className="grid grid-cols-[1fr_1fr] items-end gap-10 border-b border-dashed border-[var(--color-primary)] pb-[43px] max-[700px]:grid-cols-1 max-[700px]:gap-7 max-[700px]:pb-[32px]">
