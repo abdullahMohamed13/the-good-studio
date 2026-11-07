@@ -48,7 +48,7 @@ function WorkItem({ index }: { index: number }) {
 
 export function Work() {
   return (
-    <section className="bg-[#f4f0e3] px-[10px] pb-[18px] pt-[10px]" id="work">
+    <section className="bg-[#f4f0e3] px-[10px] pb-[18px] pt-[28px]" id="work">
       <div className="mb-[31px] font-mono text-xs uppercase leading-[1.2] tracking-[0.035em] text-[var(--color-primary)] max-[560px]:mb-[22px] max-[560px]:text-[10px]">
         SELECTED WORK: 100% AT THE GOOD STUDIO
       </div>

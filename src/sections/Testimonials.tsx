@@ -4,17 +4,29 @@ import { testimonials } from "../data/testimonials";
 
 export function Testimonials() {
   const [startIndex, setStartIndex] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<"next" | "previous">(
+    "next",
+  );
+  const [animationKey, setAnimationKey] = useState(0);
   const count = testimonials.length;
   const getIndex = (index: number) => (index + count) % count;
   const visibleIndexes = [0, 1, 2, 3].map((offset) =>
     getIndex(startIndex + offset),
   );
 
-  function showPrevious() {
+  function changeSlide(direction: "next" | "previous") {
+    setSlideDirection(direction);
+    setAnimationKey((current) => current + 1);
     setStartIndex((current) => getIndex(current - 1));
   }
 
+  function showPrevious() {
+    changeSlide("previous");
+  }
+
   function showNext() {
+    setSlideDirection("next");
+    setAnimationKey((current) => current + 1);
     setStartIndex((current) => getIndex(current + 1));
   }
 
@@ -41,7 +53,14 @@ export function Testimonials() {
       </div>
       <div className="overflow-hidden" aria-roledescription="carousel">
         <div className="mt-[50px] overflow-hidden max-[700px]:mt-[30px]">
-          <div className="grid w-full grid-flow-col gap-[18px] overflow-visible [grid-auto-columns:calc((100%-36px)/3)] max-[700px]:gap-5 max-[700px]:[grid-auto-columns:100%]">
+          <div
+            key={animationKey}
+            className={`grid w-full grid-flow-col gap-[18px] overflow-visible [grid-auto-columns:calc((100%-36px)/3)] max-[700px]:gap-5 max-[700px]:[grid-auto-columns:100%] ${
+              slideDirection === "next"
+                ? "testimonials-slide-next"
+                : "testimonials-slide-previous"
+            }`}
+          >
             {visibleIndexes.map((index) => {
               const q = testimonials[index];
               return (

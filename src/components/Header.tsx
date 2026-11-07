@@ -10,15 +10,29 @@ export function Header() {
         href="/"
         aria-label={`${siteConfig.name} home`}
       >
-        The Good <span className="ml-2 text-[var(--color-accent)]">[Studio]</span>
+        The Good{" "}
+        <span className="ml-2 text-[var(--color-accent)]">[Studio]</span>
       </a>
       <p className="text-xs max-[700px]:hidden">
-        Hi, stranger. Life is funny. So live it <span className="underline text-[var(--color-secondary)]">Good</span>.{" "}
+        Hi, stranger. Life is funny. So live it{" "}
+        <span className="underline text-[var(--color-secondary)]">Good</span>.{" "}
         <span className="asterisk asterisk ml-[7px] align-middle text-[19px]">
           ☼
         </span>
       </p>
       <nav className="flex items-center gap-[30px] max-[700px]:hidden">
+        <a
+          className="text-xs text-inherit no-underline hover:text-[var(--color-accent)]"
+          href={isHomePage ? "#services" : "/#services"}
+        >
+          Services
+        </a>
+        <a
+          className="text-xs text-inherit no-underline hover:text-[var(--color-accent)]"
+          href={isHomePage ? "#process" : "/#process"}
+        >
+          Process
+        </a>
         <a
           className="text-xs text-inherit no-underline hover:text-[var(--color-accent)]"
           href={isHomePage ? "#work" : "/#work"}
@@ -27,9 +41,9 @@ export function Header() {
         </a>
         <a
           className="text-xs text-inherit no-underline hover:text-[var(--color-accent)]"
-          href={isHomePage ? "#about" : "/#about"}
+          href={isHomePage ? "#opinions" : "/#opinions"}
         >
-          About
+          Opinions
         </a>
         <a
           className="border-b border-current py-[9px] text-xs text-inherit no-underline hover:text-[var(--color-accent)]"

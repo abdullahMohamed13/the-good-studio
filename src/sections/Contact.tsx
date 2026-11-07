@@ -41,7 +41,7 @@ export function Contact() {
   return (
     <div className="min-h-screen border-r-[4px] border-[var(--color-primary)] bg-[#f3efe6] text-[var(--color-primary)]">
       <div className="flex items-end justify-between border-b border-dashed border-[var(--color-secondary)] px-[10px] pb-[6px] pt-[14px] max-[700px]:items-start max-[700px]:gap-3">
-        <h1 className="m-0 text-[clamp(72px,8.5vw,110px)] font-normal uppercase leading-[0.95] tracking-[-0.065em]">
+        <h1 className="m-0 text-[clamp(72px,8.5vw,110px)] text-[var(--color-accent)] font-semibold uppercase leading-[0.95] tracking-[-0.065em]">
           Contact
         </h1>
         <p className="mb-[9px] text-right font-mono text-[9px] text-[var(--color-accent)] uppercase leading-[1.5] max-[700px]:hidden">

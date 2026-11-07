@@ -37,9 +37,50 @@ html {
   * {
     transition: none !important;
   }
+  .testimonials-slide-next,
+  .testimonials-slide-previous {
+    animation: none !important;
+  }
 }
 
 /*Classes*/
 .asterisk {
   color: var(--color-accent);
+}
+
+@keyframes testimonials-slide-next {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes testimonials-slide-previous {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.testimonials-slide-next,
+.testimonials-slide-previous {
+  animation-duration: 280ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.testimonials-slide-next {
+  animation-name: testimonials-slide-next;
+}
+
+.testimonials-slide-previous {
+  animation-name: testimonials-slide-previous;
 }

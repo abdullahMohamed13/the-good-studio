@@ -8,6 +8,8 @@ import { Testimonials } from "./sections/Testimonials";
 import { Footer } from "./sections/Footer";
 import { Contact } from "./sections/Contact";
 import { ContactCallout } from "./sections/ContactCallout";
+import { Services } from "./sections/Services";
+import { Process } from "./sections/Process";
 function App() {
   const isContactRoute =
     window.location.pathname === "/contact" ||
@@ -22,7 +24,9 @@ function App() {
         ) : (
           <>
             <Hero />
+            <Services />
             <Work />
+            <Process />
             <Testimonials />
             <ContactCallout />
           </>
