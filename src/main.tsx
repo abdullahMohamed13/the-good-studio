@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles/style.css";
+import "./styles/motion.css";
 import { Header } from "./components/Header";
 import { Hero } from "./sections/Hero";
 import { Work } from "./sections/Work";
