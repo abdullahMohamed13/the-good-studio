@@ -1,7 +1,7 @@
 export function Hero() {
   return (
     <section
-      className="relative flex h-[calc(100svh-83px)] min-h-[650px] max-h-[850px] flex-col justify-center overflow-hidden px-[8.5%] py-[48px] pb-[44px] max-[700px]:h-auto max-[700px]:min-h-[690px] max-[700px]:px-[7%] max-[700px]:py-[85px] max-[700px]:pb-[42px]"
+      className="relative isolate flex h-[calc(100svh-83px)] min-h-[650px] max-h-[850px] flex-col justify-center overflow-hidden px-[8.5%] py-[48px] pb-[44px] before:absolute before:inset-0 before:-z-10 before:bg-[url('/background-image.png')] before:bg-contain before:bg-center before:opacity-20 before:content-[''] max-[700px]:h-auto max-[700px]:min-h-[690px] max-[700px]:px-[7%] max-[700px]:py-[85px] max-[700px]:pb-[42px]"
       id="top"
     >
       <div className="flex items-center gap-[15px] font-mono text-[10px] tracking-[0.08em] max-[700px]:flex-wrap max-[700px]:gap-2 max-[700px]:text-[8px]">
