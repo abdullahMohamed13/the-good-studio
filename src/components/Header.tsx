@@ -1,7 +1,22 @@
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "../data/siteConfig";
 export function Header() {
   const isHomePage = window.location.pathname === "/";
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
 
   return (
     <header className="flex h-[83px] items-center justify-between border-b border-dashed border-[var(--color-primary)] px-[5.3%] max-[700px]:h-[68px] max-[700px]:px-[6%]">
@@ -53,11 +68,44 @@ export function Header() {
         </a>
       </nav>
       <button
+        ref={menuButton}
         className="hidden border-0 bg-transparent max-[700px]:block"
-        aria-label="Open menu"
+        type="button"
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={menuOpen}
+        aria-controls="mobile-navigation"
+        onClick={() => setMenuOpen((open) => !open)}
       >
-        <Menu size={21} />
+        {menuOpen ? <X size={21} /> : <Menu size={21} />}
       </button>
+      <nav
+        id="mobile-navigation"
+        aria-label="Mobile navigation"
+        className={`${menuOpen ? "flex" : "hidden"} absolute left-0 right-0 top-[68px] z-30 flex-col border-b border-dashed border-[var(--color-primary)] bg-[var(--color-background)] px-[6%] py-4 min-[701px]:hidden`}
+      >
+        {[
+          ["Services", "services"],
+          ["Process", "process"],
+          ["Work", "work"],
+          ["Opinions", "opinions"],
+        ].map(([label, id]) => (
+          <a
+            key={id}
+            className="border-b border-dashed border-[var(--color-primary)] py-3 text-sm text-inherit no-underline"
+            href={isHomePage ? `#${id}` : `/#${id}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            {label}
+          </a>
+        ))}
+        <a
+          className="py-3 text-sm text-inherit no-underline"
+          href="/contact"
+          onClick={() => setMenuOpen(false)}
+        >
+          Contact ↗
+        </a>
+      </nav>
     </header>
   );
 }
