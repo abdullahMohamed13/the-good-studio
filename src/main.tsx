@@ -11,6 +11,7 @@ import { ContactCallout } from "./sections/ContactCallout";
 import { Services } from "./sections/Services";
 import { Process } from "./sections/Process";
 import { ChatbotOrb } from "./components/ChatbotOrb";
+import { ScrollProgress } from "./components/ui/ScrollProgress";
 
 function App() {
   const isContactRoute =
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main>
         {isContactRoute ? (

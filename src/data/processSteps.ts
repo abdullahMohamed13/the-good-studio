@@ -14,7 +14,7 @@ export const processSteps: ProcessStep[] = [
       "We start with the good stuff: your story, your people, and what you want to make possible.",
     outcome: "A clear creative direction",
     image:
-      "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1000&q=85",
+      "https://res.cloudinary.com/uwwnts8h/image/upload/v1794076733/img-15_n9k1xm.webp",
   },
   {
     number: "II",
@@ -23,7 +23,7 @@ export const processSteps: ProcessStep[] = [
       "We turn the thinking into a visual world with a point of view, a rhythm, and a little spark.",
     outcome: "A confident design system",
     image:
-      "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1000&q=85",
+      "https://res.cloudinary.com/uwwnts8h/image/upload/v1794076732/img-13_kckwq1.webp",
   },
   {
     number: "III",
@@ -32,7 +32,7 @@ export const processSteps: ProcessStep[] = [
       "We build the thing with care, keeping the details considered and the experience feeling human.",
     outcome: "A polished, working experience",
     image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=85",
+      "https://res.cloudinary.com/uwwnts8h/image/upload/v1794076732/img-12_o2dwwk.webp",
   },
   {
     number: "IV",
@@ -41,6 +41,6 @@ export const processSteps: ProcessStep[] = [
       "We launch together, learn from the response, and leave you with the confidence to keep going.",
     outcome: "A good thing in motion",
     image:
-      "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1000&q=85",
+      "https://res.cloudinary.com/uwwnts8h/image/upload/v1794076734/img-11_zigssw.webp",
   },
 ];
