@@ -12,6 +12,28 @@ const welcomeMessage: ChatMessage = {
     "Hi, I’m Good Bot. Ask me about the studio, services, or how we work.",
 };
 
+function formatAssistantText(content: string) {
+  const withoutMarkdown = content
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/__(.*?)__/g, "$1")
+    .replace(/`(.*?)`/g, "$1")
+    .replace(/\s+[*-]\s+(?=[A-Z])/g, "\n");
+
+  let listNumber = 0;
+  return withoutMarkdown
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      if (/^[^.!?\n]{1,42}:\s/.test(line) && !/^\d+\.\s/.test(line)) {
+        listNumber += 1;
+        return `${listNumber}. ${line}`;
+      }
+      return line;
+    })
+    .join("\n");
+}
+
 export function ChatbotOrb() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -97,11 +119,13 @@ export function ChatbotOrb() {
                 className={
                   message.role === "user"
                     ? "self-end border border-dashed border-[var(--color-accent)] px-2 py-1 text-right"
-                    : "max-w-[245px] border-l-2 border-[var(--color-secondary)] pl-2"
+                    : "max-w-[245px] whitespace-pre-line border-l-2 border-[var(--color-secondary)] pl-2"
                 }
                 key={`${message.role}-${index}`}
               >
-                {message.content}
+                {message.role === "assistant"
+                  ? formatAssistantText(message.content)
+                  : message.content}
               </p>
             ))}
             {isLoading && (

@@ -1,4 +1,4 @@
 export const siteConfig = {
   name: "The Good Studio",
-  email: "hello@example.com",
+  email: "abdullah.229op@gmail.com",
 };

@@ -1,6 +1,8 @@
 import { processSteps } from "../../src/data/processSteps";
 import { services } from "../../src/data/services";
 import { siteConfig } from "../../src/data/siteConfig";
+import { testimonials } from "../../src/data/testimonials";
+import { workMedia } from "../../src/data/workMedia";
 
 type ChatRole = "user" | "assistant" | "system";
 
@@ -25,16 +27,27 @@ type ChatRequest = { messages?: unknown };
 
 const studioKnowledge = [
   `Studio name: ${siteConfig.name}.`,
-  `Services: ${services.map((service) => `${service.title} — ${service.description}`).join("; ")}`,
-  `Process: ${processSteps.map((step) => `${step.title} — ${step.description}`).join("; ")}`,
-  "The studio makes thoughtful digital experiences for phenomenal humans.",
+  "The studio is an independent design studio based everywhere.",
+  "The studio makes visual design and web development for phenomenal humans.",
+  "The studio is coded and designed by humans, backed by instinct and intuition.",
+  `Services: ${services.map((service) => `${service.title} — ${service.description} (${service.tags})`).join("; ")}`,
+  `Process: ${processSteps.map((step) => `${step.number}. ${step.title} — ${step.description} Outcome: ${step.outcome}`).join("; ")}`,
+  `Selected work: ${workMedia.map((project) => `${project.name} (${project.type})`).join(", ")}.`,
+  `Testimonials: ${testimonials.map((testimonial) => `${testimonial.name}, ${testimonial.role}, said: ${testimonial.quote}`).join(" ")}`,
+  "The contact page accepts a name, email, project interests, budget, project details, existing assets, and referral information.",
+  "Contact interests include website design, Squarespace development, Shopify development, other web development, collaboration, site maintenance, studio day, brand identity, and something else.",
+  "Visitors can say whether they already have copy, photography or videos, and branding style.",
+  "The contact page says the studio speaks English, español, and deutsch.",
+  `The contact email configured on the site is ${siteConfig.email}.`,
+  "The contact callout invites visitors to tell the studio about their project and make waves.",
+  "The footer links to the studio GitHub profile and displays a currently exploring location line.",
   "If a question needs exact pricing, availability, or project details, direct the visitor to the contact page instead of inventing an answer.",
 ].join("\n");
 
 const systemMessage: ChatMessage = {
   role: "system",
   content: `You are Good Bot, the warm and concise assistant for The Good Studio.
-Answer questions about the studio using only the information below. Keep replies human, helpful, and under 80 words. If you do not know something, say so clearly. Never invent services, clients, prices, results, or availability.
+Answer questions about the studio using only the information below. Keep replies human, helpful, and under 80 words. If you do not know something, say so clearly. Never invent services, clients, prices, results, or availability. Do not use Markdown, asterisks, or bullet points. Use plain text and numbered lines for lists.
 
 ${studioKnowledge}`,
 };
