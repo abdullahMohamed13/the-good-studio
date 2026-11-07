@@ -4,7 +4,7 @@ export function Header() {
   const isHomePage = window.location.pathname === "/";
 
   return (
-    <header className="flex h-[83px] items-center justify-between border-b border-[color-mix(in_srgb,var(--color-primary)_13%,transparent)] px-[5.3%] max-[700px]:h-[68px] max-[700px]:px-[6%]">
+    <header className="flex h-[83px] items-center justify-between border-b border-dashed border-[var(--color-primary)] px-[5.3%] max-[700px]:h-[68px] max-[700px]:px-[6%]">
       <a
         className="text-[25px] font-bold tracking-[-1.8px] text-[var(--color-primary)] no-underline"
         href="/"
