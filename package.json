@@ -8,23 +8,25 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
+    "@vitejs/plugin-react": "6.2.1",
     "lucide-react": "^0.468.0",
-    "react": "latest",
-    "react-dom": "latest",
-    "vite": "latest"
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "vite": "8.3.6"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "autoprefixer": "latest",
-    "postcss": "latest",
+    "autoprefixer": "10.6.2",
+    "postcss": "8.5.32",
     "prettier": "^3.5.3",
     "tailwindcss": "^3.4.17",
-    "typescript": "latest",
+    "typescript": "7.0.2",
     "wrangler": "^4.158.0"
   }
 }
