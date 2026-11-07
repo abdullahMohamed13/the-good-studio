@@ -12,7 +12,11 @@ type ChatMessage = {
 type AiBinding = {
   run: (
     model: string,
-    input: { messages: ChatMessage[]; max_tokens: number },
+    input: {
+      messages: ChatMessage[];
+      max_tokens: number;
+      chat_template_kwargs: { enable_thinking: boolean };
+    },
   ) => Promise<unknown>;
 };
 
@@ -53,15 +57,18 @@ function isMessage(value: unknown): value is ChatMessage {
   );
 }
 
-function getText(result: unknown) {
-  if (!result || typeof result !== "object") return "";
-  const data = result as Record<string, any>;
-  if (typeof data.response === "string") return data.response;
-  const choice = data.choices?.[0];
-  if (typeof choice?.message?.content === "string")
-    return choice.message.content;
-  if (typeof choice?.text === "string") return choice.text;
-  return "";
+function getText(value: unknown): string {
+  if (typeof value === "string") return value.trim();
+  if (Array.isArray(value)) return value.map(getText).filter(Boolean).join(" ");
+  if (!value || typeof value !== "object") return "";
+
+  const data = value as Record<string, unknown>;
+  const directText = [data.response, data.output_text, data.text, data.content]
+    .map(getText)
+    .find(Boolean);
+  if (directText) return directText;
+
+  return getText(data.choices) || getText(data.message) || getText(data.output);
 }
 
 export async function onRequestPost({
@@ -90,10 +97,12 @@ export async function onRequestPost({
     const result = await env.AI.run("@cf/google/gemma-4-26b-a4b-it", {
       messages: [systemMessage, ...messages],
       max_tokens: 180,
+      chat_template_kwargs: { enable_thinking: false },
     });
     const response = getText(result);
 
     if (!response) {
+      console.error("Unexpected Workers AI response", JSON.stringify(result));
       return json(
         { error: "The orb could not find an answer this time." },
         502,

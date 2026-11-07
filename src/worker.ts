@@ -4,7 +4,11 @@ type Env = {
   AI: {
     run: (
       model: string,
-      input: { messages: unknown[]; max_tokens: number },
+      input: {
+        messages: unknown[];
+        max_tokens: number;
+        chat_template_kwargs: { enable_thinking: boolean };
+      },
     ) => Promise<unknown>;
   };
   ASSETS: {
