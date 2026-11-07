@@ -1,4 +1,4 @@
-import React from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles/style.css";
 import { Header } from "./components/Header";
@@ -40,7 +40,7 @@ function App() {
   );
 }
 createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  <StrictMode>
     <App />
-  </React.StrictMode>,
+  </StrictMode>,
 );
