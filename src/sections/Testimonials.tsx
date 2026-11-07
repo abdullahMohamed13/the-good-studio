@@ -33,7 +33,7 @@ export function Testimonials() {
   return (
     <section
       className="bg-[#f4f0e3] px-[8.5%] py-[105px] max-[700px]:px-[7%] max-[700px]:py-[75px]"
-      id="about"
+      id="opinions"
     >
       <div className="mb-[43px] flex items-end justify-between max-[700px]:items-start">
         <div>
@@ -65,7 +65,7 @@ export function Testimonials() {
               const q = testimonials[index];
               return (
                 <article
-                  className="flex min-h-[260px] flex-col border-t border-[#20201d55] py-5 pr-5 pb-3 max-[700px]:min-h-[215px]"
+                  className="flex min-h-[260px] flex-col border-t border-[var(--color-accent)] border-dashed py-5 pr-5 pb-3 max-[700px]:min-h-[215px]"
                   key={q.name}
                 >
                   <span className="h-[55px] font-serif text-[60px] text-[var(--color-primary)]">
@@ -75,7 +75,7 @@ export function Testimonials() {
                     {q.quote}
                   </p>
                   <div className="mt-auto flex items-center gap-[11px]">
-                    <span className="grid h-[33px] w-[33px] place-items-center rounded-full bg-[#e9c0a6] font-serif text-base">
+                    <span className="grid h-[33px] w-[33px] place-items-center rounded-full bg-[var(--color-accent)] font-serif text-base text-[var(--color-background)]">
                       {q.name[0]}
                     </span>
                     <div className="flex flex-col gap-1">
