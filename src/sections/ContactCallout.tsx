@@ -14,7 +14,7 @@ export function ContactCallout() {
         </em>
       </h2>
       <a
-        className="absolute bottom-12 right-[2%] inline-flex items-center gap-5 rounded-full border border-[var(--color-background)] px-6 py-4 font-mono text-[10px] text-[var(--color-background)] no-underline transition-colors duration-200 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] max-[700px]:bottom-7 max-[700px]:right-0 max-[700px]:gap-3 max-[700px]:px-5 max-[700px]:py-3 max-[700px]:text-[9px]"
+        className="absolute bottom-12 right-[4%] inline-flex items-center gap-5 rounded-full border border-[var(--color-background)] px-6 py-4 font-mono text-[10px] text-[var(--color-background)] no-underline transition-colors duration-200 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] max-[700px]:bottom-7 max-[700px]:gap-3 max-[700px]:px-5 max-[700px]:py-3 max-[700px]:text-[9px]"
         href="/contact"
       >
         TELL US ABOUT IT <span aria-hidden="true">↗</span>
