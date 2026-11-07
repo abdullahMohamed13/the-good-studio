@@ -30,6 +30,8 @@ const studioKnowledge = [
   "The studio is an independent design studio based everywhere.",
   "The studio makes visual design and web development for phenomenal humans.",
   "The studio is coded and designed by humans, backed by instinct and intuition.",
+  "This project was created and designed by Abdallah Mohamed Aziz.",
+  "Abdallah Mohamed Aziz's LinkedIn profile is https://www.linkedin.com/in/abdallah-m-aziz/.",
   `Services: ${services.map((service) => `${service.title} — ${service.description} (${service.tags})`).join("; ")}`,
   `Process: ${processSteps.map((step) => `${step.number}. ${step.title} — ${step.description} Outcome: ${step.outcome}`).join("; ")}`,
   `Selected work: ${workMedia.map((project) => `${project.name} (${project.type})`).join(", ")}.`,
