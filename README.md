@@ -2,7 +2,7 @@
 
 The Good Studio is an independent creative studio making thoughtful digital experiences for phenomenal humans. This portfolio introduces the studio, its services, selected work, process, client feedback, and ways to get in touch.
 
-<!--![Animated preview of The Good Studio website](public/website-preview.gif)-->
+![Animated preview of The Good Studio website](src/assets/video-preview.gif)
 
 ## What’s inside
 
@@ -14,7 +14,7 @@ The Good Studio is an independent creative studio making thoughtful digital expe
 
 ## Built with
 
-React, TypeScript, Vite, Tailwind CSS, and GSAP.
+React, TypeScript, Tailwind_CSS, and GSAP.
 
 ## Project structure
 
@@ -22,4 +22,5 @@ React, TypeScript, Vite, Tailwind CSS, and GSAP.
 - `src/sections/`: homepage and contact page sections.
 - `src/components/`: shared navigation and interactive UI components.
 - `src/styles/`: global styles and brand tokens.
-- `public/`: local static assets, including the animated website preview.
+- `functions/`: Cloudflare Worker functions for server-side behavior.
+- `public/`: local static assets.
