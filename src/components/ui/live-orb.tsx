@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
-export type LiveOrbVariant = "white" | "black" | "webgl" | "custom";
+export type LiveOrbVariant = "white" | "black" | "custom";
 export type LiveOrbTheme = "light" | "dark" | "auto";
 
 export type LiveOrbOptions = {
@@ -25,7 +25,7 @@ const presets = {
   custom: { color: "#7C5CFF", eyeColor: "#FAFAFA" },
 };
 
-const webglColors = ["#7C6AF7", "#7DD3C7", "#E8B4D4"];
+const orbColors = ["#7C6AF7", "#7DD3C7", "#E8B4D4"];
 
 function isDarkTheme(theme: LiveOrbTheme = "auto") {
   if (theme === "dark") return true;
@@ -61,14 +61,6 @@ function resolveColors(
   theme: LiveOrbTheme | undefined,
 ) {
   const resolvedVariant = variant ?? (isDarkTheme(theme) ? "white" : "black");
-  if (resolvedVariant === "webgl") {
-    return {
-      body: colors?.[1] ?? webglColors[1],
-      eye: "#0C0C10",
-      palette: colors?.length ? colors : webglColors,
-      gradient: true,
-    };
-  }
   const preset =
     presets[resolvedVariant === "custom" ? "custom" : resolvedVariant];
   return {
@@ -127,9 +119,9 @@ export function LiveOrb({
         : null;
       if (body) {
         const palette = resolved.palette;
-        body.addColorStop(0, palette[0] ?? webglColors[0]);
-        body.addColorStop(0.5, palette[1] ?? webglColors[1]);
-        body.addColorStop(1, palette[2] ?? webglColors[2]);
+        body.addColorStop(0, palette[0] ?? orbColors[0]);
+        body.addColorStop(0.5, palette[1] ?? orbColors[1]);
+        body.addColorStop(1, palette[2] ?? orbColors[2]);
       }
       context.beginPath();
       context.arc(centerX, centerY, radius, 0, Math.PI * 2);

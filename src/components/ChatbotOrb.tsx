@@ -55,7 +55,12 @@ export function ChatbotOrb() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages }),
+        signal: AbortSignal.timeout(15000),
+        body: JSON.stringify({
+          messages: nextMessages
+            .filter((message) => message.role === "user")
+            .slice(-6),
+        }),
       });
       const data = (await response.json()) as {
         response?: string;
@@ -76,9 +81,11 @@ export function ChatbotOrb() {
         {
           role: "assistant",
           content:
-            error instanceof Error
-              ? error.message
-              : "The orb could not answer right now.",
+            error instanceof DOMException && error.name === "TimeoutError"
+              ? "That took too long. Please try again, or reach us at /contact."
+              : error instanceof Error
+                ? error.message
+                : "The orb could not answer right now.",
         },
       ]);
     } finally {
@@ -139,6 +146,16 @@ export function ChatbotOrb() {
             </p>
           )}
         </div>
+
+        <p className="px-4 pb-2 font-mono text-[9px] opacity-60">
+          Answers are based on information published on this website.
+        </p>
+        <a
+          className="px-4 pb-3 font-mono text-[10px] text-[var(--color-accent)]"
+          href="/contact"
+        >
+          Need a specific answer? Contact the studio ↗
+        </a>
 
         <form
           className="flex border-t border-dashed border-[var(--color-primary)] p-2"

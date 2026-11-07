@@ -54,6 +54,9 @@ Answer questions about the studio using only the information below. Keep replies
 ${studioKnowledge}`,
 };
 
+let rateWindowStarted = 0;
+let rateCount = 0;
+
 function json(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
@@ -61,11 +64,11 @@ function json(data: unknown, status = 200) {
   });
 }
 
-function isMessage(value: unknown): value is ChatMessage {
+function isUserMessage(value: unknown): value is ChatMessage {
   if (!value || typeof value !== "object") return false;
   const message = value as Record<string, unknown>;
   return (
-    (message.role === "user" || message.role === "assistant") &&
+    message.role === "user" &&
     typeof message.content === "string" &&
     message.content.trim().length > 0 &&
     message.content.length <= 1000
@@ -93,20 +96,40 @@ export async function onRequestPost({
   request: Request;
   env: Env;
 }) {
+  if (
+    request.headers.get("content-length") &&
+    Number(request.headers.get("content-length")) > 12000
+  )
+    return json({ error: "That message is too large." }, 413);
   let body: ChatRequest;
   try {
-    body = (await request.json()) as ChatRequest;
+    const raw = await request.text();
+    if (raw.length > 12000)
+      return json({ error: "That message is too large." }, 413);
+    body = JSON.parse(raw) as ChatRequest;
   } catch {
     return json({ error: "Please send a valid JSON request." }, 400);
   }
 
   const messages = Array.isArray(body.messages)
-    ? body.messages.filter(isMessage).slice(-8)
+    ? body.messages.filter(isUserMessage).slice(-6)
     : [];
 
   if (!messages.some((message) => message.role === "user")) {
     return json({ error: "Please include a message." }, 400);
   }
+
+  const now = Date.now();
+  if (now - rateWindowStarted > 60_000) {
+    rateWindowStarted = now;
+    rateCount = 0;
+  }
+  if (rateCount >= 12)
+    return json(
+      { error: "The orb needs a moment. Please try again shortly." },
+      429,
+    );
+  rateCount += 1;
 
   try {
     const result = await env.AI.run("@cf/google/gemma-4-26b-a4b-it", {
