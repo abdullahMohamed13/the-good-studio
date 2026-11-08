@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { siteConfig } from "../data/siteConfig";
 import {
   assets,
   collaborationTypes,
@@ -67,11 +66,6 @@ export function ContactForm({
       <form
         ref={formRef}
         className="space-y-[12px]"
-        action={`mailto:${siteConfig.email}?subject=${encodeURIComponent(
-          activePoint.subject,
-        )}`}
-        method="post"
-        encType="text/plain"
         onSubmit={(event) => {
           event.preventDefault();
           setToastState("hidden");
