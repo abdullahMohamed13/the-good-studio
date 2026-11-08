@@ -94,7 +94,7 @@ export function ChatbotOrb() {
   }
 
   return (
-    <div className="fixed inset-auto bottom-6 right-6 z-40 max-[700px]:bottom-4 max-[700px]:right-4">
+    <div className="fixed inset-auto bottom-5 right-4 z-40 max-[700px]:bottom-4 max-[700px]:right-4">
       <div
         className={`absolute bottom-[calc(100%+12px)] right-0 flex max-h-[460px] w-[320px] origin-bottom-right flex-col border border-dashed border-[var(--color-primary)] bg-[var(--color-background)] text-[var(--color-primary)] shadow-[6px_6px_0_var(--color-primary)] transition-[opacity,transform,visibility] duration-300 ease-out max-[430px]:w-[calc(100vw-32px)] ${
           isOpen

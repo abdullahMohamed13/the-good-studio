@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles/style.css";
+import "./styles/motion.css";
 import { Header } from "./components/Header";
 import { Hero } from "./sections/Hero";
 import { Work } from "./sections/Work";
@@ -11,6 +12,7 @@ import { ContactCallout } from "./sections/ContactCallout";
 import { Services } from "./sections/Services";
 import { Process } from "./sections/Process";
 import { ChatbotOrb } from "./components/ChatbotOrb";
+import { ScrollProgress } from "./components/ui/ScrollProgress";
 
 function App() {
   const isContactRoute =
@@ -19,6 +21,7 @@ function App() {
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main>
         {isContactRoute ? (

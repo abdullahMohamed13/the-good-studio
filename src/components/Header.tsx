@@ -1,6 +1,10 @@
 import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "../data/siteConfig";
+
+const navLinkClass =
+  "nav-link text-xs text-inherit no-underline transition-colors hover:text-[var(--color-accent)] focus-visible:text-[var(--color-accent)]";
+
 export function Header() {
   const isHomePage = window.location.pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,7 +23,7 @@ export function Header() {
   }, [menuOpen]);
 
   return (
-    <header className="flex h-[83px] items-center justify-between border-b border-dashed border-[var(--color-primary)] px-[5.3%] max-[700px]:h-[68px] max-[700px]:px-[6%]">
+    <header className="sticky top-0 z-40 flex h-[83px] items-center justify-between border-b border-dashed border-[var(--color-primary)] bg-[color-mix(in_srgb,var(--color-background)_88%,transparent)] px-[5.3%] backdrop-blur-md max-[700px]:h-[68px] max-[700px]:px-[6%]">
       <a
         className="text-[25px] font-bold tracking-[-1.8px] text-[var(--color-primary)] no-underline"
         href="/"
@@ -37,31 +41,28 @@ export function Header() {
       </p>
       <nav className="flex items-center gap-[30px] max-[700px]:hidden">
         <a
-          className="text-xs text-inherit no-underline hover:text-[var(--color-accent)]"
+          className={navLinkClass}
           href={isHomePage ? "#services" : "/#services"}
         >
           Services
         </a>
         <a
-          className="text-xs text-inherit no-underline hover:text-[var(--color-accent)]"
+          className={navLinkClass}
           href={isHomePage ? "#process" : "/#process"}
         >
           Process
         </a>
-        <a
-          className="text-xs text-inherit no-underline hover:text-[var(--color-accent)]"
-          href={isHomePage ? "#work" : "/#work"}
-        >
+        <a className={navLinkClass} href={isHomePage ? "#work" : "/#work"}>
           Work
         </a>
         <a
-          className="text-xs text-inherit no-underline hover:text-[var(--color-accent)]"
+          className={navLinkClass}
           href={isHomePage ? "#opinions" : "/#opinions"}
         >
           Opinions
         </a>
         <a
-          className="border-b border-current py-[9px] text-xs text-inherit no-underline hover:text-[var(--color-accent)]"
+          className="border-b border-current py-[9px] text-xs text-inherit no-underline transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
           href="/contact"
         >
           Let’s talk <b className="ml-[10px]">↗</b>
