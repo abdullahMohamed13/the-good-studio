@@ -25,7 +25,7 @@ function buildArms(): Arm[] {
 
 export function GoodMark() {
   const group = useRef<THREE.Group>(null);
-  const ring = useRef<THREE.Mesh>(null);
+  const ring = useRef<THREE.Line>(null);
   const dust = useRef<THREE.Points>(null);
   const pointer = useRef({ x: 0, y: 0 });
   const reduced = useRef(false);
@@ -43,6 +43,38 @@ export function GoodMark() {
     }
     return positions;
   }, []);
+
+  const ringLine = useMemo(() => {
+    const points: THREE.Vector3[] = [];
+    const segments = 240;
+
+    for (let index = 0; index <= segments; index += 1) {
+      const angle = (index / segments) * Math.PI * 2;
+      points.push(
+        new THREE.Vector3(Math.cos(angle) * 1.98, Math.sin(angle) * 1.98, 0),
+      );
+    }
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineDashedMaterial({
+      color: "#ee6845",
+      transparent: true,
+      opacity: 0.5,
+      dashSize: 0.1,
+      gapSize: 0.07,
+    });
+    const line = new THREE.Line(geometry, material);
+    line.computeLineDistances();
+
+    return line;
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      ringLine.geometry.dispose();
+      ringLine.material.dispose();
+    };
+  }, [ringLine]);
 
   useEffect(() => {
     reduced.current = window.matchMedia(
@@ -133,10 +165,11 @@ export function GoodMark() {
           />
         </mesh>
 
-        <mesh ref={ring} rotation={[Math.PI / 2.35, 0.18, 0]}>
-          <torusGeometry args={[1.98, 0.012, 8, 160]} />
-          <meshBasicMaterial color="#ee6845" transparent opacity={0.5} />
-        </mesh>
+        <primitive
+          ref={ring}
+          object={ringLine}
+          rotation={[Math.PI / 2.35, 0.18, 0]}
+        />
 
         <points ref={dust}>
           <bufferGeometry>

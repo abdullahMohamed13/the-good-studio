@@ -1,15 +1,11 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { useI18n } from "../i18n";
+import { localizedPath } from "../lib/routes";
 import { LiveOrb } from "./ui/live-orb";
 
 type ChatMessage = {
   role: "user" | "assistant";
   content: string;
-};
-
-const welcomeMessage: ChatMessage = {
-  role: "assistant",
-  content:
-    "Hi, I’m Good Bot. Ask me about the studio, services, or how we work.",
 };
 
 function formatAssistantText(content: string) {
@@ -35,10 +31,18 @@ function formatAssistantText(content: string) {
 }
 
 export function ChatbotOrb() {
+  const { locale, copy } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>([welcomeMessage]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
+    { role: "assistant", content: copy.chatbot.welcome },
+  ]);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setMessages([{ role: "assistant", content: copy.chatbot.welcome }]);
+    setInput("");
+  }, [copy.chatbot.welcome]);
 
   async function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,21 +58,32 @@ export function ChatbotOrb() {
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Locale": locale,
+        },
         signal: AbortSignal.timeout(15000),
         body: JSON.stringify({
+          locale,
           messages: nextMessages
             .filter((message) => message.role === "user")
             .slice(-6),
         }),
       });
-      const data = (await response.json()) as {
+      const data = (await response.json().catch(() => null)) as {
         response?: string;
         error?: string;
-      };
+      } | null;
 
-      if (!response.ok || !data.response) {
-        throw new Error(data.error ?? "The orb could not answer right now.");
+      if (!response.ok || !data?.response) {
+        setMessages((current) => [
+          ...current,
+          {
+            role: "assistant",
+            content: data?.error ?? copy.chatbot.errors.unavailable,
+          },
+        ]);
+        return;
       }
 
       setMessages((current) => [
@@ -82,10 +97,8 @@ export function ChatbotOrb() {
           role: "assistant",
           content:
             error instanceof DOMException && error.name === "TimeoutError"
-              ? "That took too long. Please try again, or reach us at /contact."
-              : error instanceof Error
-                ? error.message
-                : "The orb could not answer right now.",
+              ? copy.chatbot.errors.timeout
+              : copy.chatbot.errors.unavailable,
         },
       ]);
     } finally {
@@ -102,16 +115,16 @@ export function ChatbotOrb() {
             : "invisible pointer-events-none translate-y-3 scale-95 opacity-0"
         }`}
         role="dialog"
-        aria-label="Good Studio chatbot"
+        aria-label={copy.chatbot.title}
         aria-hidden={!isOpen}
       >
         <div className="flex items-start justify-between border-b border-dashed border-[var(--color-primary)] p-4">
           <div>
             <span className="font-mono text-[9px] uppercase text-[var(--color-secondary)]">
-              GOOD BOT / LIVE
+              {copy.chatbot.name}
             </span>
             <p className="mt-1 font-serif text-lg leading-[1.2]">
-              Ask the studio.
+              {copy.chatbot.title}
             </p>
           </div>
           <button
@@ -119,7 +132,7 @@ export function ChatbotOrb() {
             type="button"
             onClick={() => setIsOpen(false)}
             tabIndex={isOpen ? 0 : -1}
-            aria-label="Close chatbot"
+            aria-label={copy.chatbot.close}
           >
             ×
           </button>
@@ -142,19 +155,19 @@ export function ChatbotOrb() {
           ))}
           {isLoading && (
             <p className="border-l-2 border-[var(--color-secondary)] pl-2 opacity-60">
-              The orb is thinking…
+              {copy.chatbot.thinking}
             </p>
           )}
         </div>
 
         <p className="px-4 pb-2 font-mono text-[9px] opacity-60">
-          Answers are based on information published on this website.
+          {copy.chatbot.disclaimer}
         </p>
         <a
           className="px-4 pb-3 font-mono text-[10px] text-[var(--color-accent)]"
-          href="/contact"
+          href={localizedPath(locale, "/contact")}
         >
-          Need a specific answer? Contact the studio ↗
+          {copy.chatbot.contactLink}
         </a>
 
         <form
@@ -165,17 +178,17 @@ export function ChatbotOrb() {
             className="min-w-0 flex-1 bg-transparent px-2 py-2 font-mono text-[10px] outline-none placeholder:text-[var(--color-secondary)]"
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder="Ask something good…"
+            placeholder={copy.chatbot.placeholder}
             maxLength={1000}
             disabled={!isOpen}
-            aria-label="Chat message"
+            aria-label={copy.chatbot.inputLabel}
           />
           <button
             className="px-2 font-mono text-[10px] uppercase text-[var(--color-accent)] disabled:opacity-40"
             type="submit"
             disabled={!isOpen || isLoading || !input.trim()}
           >
-            Send ↗
+            {copy.chatbot.send}
           </button>
         </form>
       </div>
@@ -183,7 +196,7 @@ export function ChatbotOrb() {
         className="group relative block rounded-full border-0 bg-transparent p-0"
         type="button"
         onClick={() => setIsOpen((open) => !open)}
-        aria-label={isOpen ? "Close chatbot" : "Open chatbot"}
+        aria-label={isOpen ? copy.chatbot.close : copy.chatbot.open}
         aria-expanded={isOpen}
       >
         <LiveOrb
@@ -193,6 +206,7 @@ export function ChatbotOrb() {
           eyeColor="#ee6845"
           interactive
           blink
+          ariaLabel={copy.chatbot.orbAlt}
           className="transition-transform duration-200 group-hover:scale-105"
         />
       </button>

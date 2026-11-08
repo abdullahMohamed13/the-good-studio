@@ -1,11 +1,15 @@
-import { workMedia } from "../data/workMedia";
 import { useState } from "react";
+import { useI18n } from "../i18n";
+import { getWorkMedia } from "../i18n/content";
 import { WanderingEyes } from "../components/ui/wandering-eyes";
 import { Reveal } from "../components/animations/Reveal";
 
-function WorkItem({ index }: { index: number }) {
-  const media = workMedia[index];
+type WorkMediaItem = ReturnType<typeof getWorkMedia>[number];
+
+function WorkItem({ media, index }: { media: WorkMediaItem; index: number }) {
+  const { copy } = useI18n();
   const [loaded, setLoaded] = useState(false);
+  const number = String(index + 1);
 
   return (
     <div className="group min-w-0 text-[var(--color-primary)]">
@@ -13,7 +17,7 @@ function WorkItem({ index }: { index: number }) {
         {!loaded && (
           <WanderingEyes
             className="inset-2 h-[calc(100%-16px)] w-[calc(100%-16px)] bg-[#e8e2d5]"
-            aria-label={`Loading portfolio item ${index + 1}`}
+            aria-label={copy.work.loadingItem.replace("{number}", number)}
           />
         )}
         {media.type === "video" ? (
@@ -24,7 +28,7 @@ function WorkItem({ index }: { index: number }) {
             loop
             playsInline
             preload="metadata"
-            aria-label={`Portfolio video ${index + 1}`}
+            aria-label={copy.work.videoLabel.replace("{number}", number)}
             onLoadedData={() => setLoaded(true)}
           >
             <source src={media.src} type="video/mp4" />
@@ -48,17 +52,20 @@ function WorkItem({ index }: { index: number }) {
 }
 
 export function Work() {
+  const { locale, copy } = useI18n();
+  const workMedia = getWorkMedia(locale);
+
   return (
     <section className="bg-[#f4f0e3] px-[10px] pb-[18px] pt-[28px]" id="work">
       <Reveal>
         <div className="mb-[31px] font-mono text-xs uppercase leading-[1.2] tracking-[0.035em] text-[var(--color-primary)] max-[560px]:mb-[22px] max-[560px]:text-[10px]">
-          SELECTED WORK: 100% AT THE GOOD STUDIO
+          {copy.work.label}
         </div>
       </Reveal>
       <div className="grid grid-cols-5 gap-x-[11px] gap-y-7 max-[900px]:grid-cols-3 max-[560px]:grid-cols-2 max-[560px]:gap-x-[9px] max-[560px]:gap-y-[22px]">
-        {workMedia.map((_, index) => (
-          <Reveal key={index} className="min-w-0" delay={(index % 5) * 60}>
-            <WorkItem index={index} />
+        {workMedia.map((media, index) => (
+          <Reveal key={media.id} className="min-w-0" delay={(index % 5) * 60}>
+            <WorkItem media={media} index={index} />
           </Reveal>
         ))}
       </div>

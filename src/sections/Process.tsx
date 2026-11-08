@@ -1,17 +1,20 @@
-import { processSteps } from "../data/processSteps";
+import { useI18n } from "../i18n";
+import { getProcessSteps } from "../i18n/content";
 import { ProcessInteractor } from "@/components/ui/connoisseur-stack-interactor";
 import { Reveal } from "../components/animations/Reveal";
-
-const processItems = processSteps.map((step, index) => ({
-  num: step.number,
-  name: step.title,
-  clipId: `process-step-${index}`,
-  image: step.image,
-  outcome: step.outcome,
-  description: step.description,
-}));
+import { SegmentedText } from "../components/ui/SegmentedText";
 
 export function Process() {
+  const { locale, copy } = useI18n();
+  const processItems = getProcessSteps(locale).map((step, index) => ({
+    num: step.number,
+    name: step.title,
+    clipId: `process-step-${index}`,
+    image: step.image,
+    outcome: step.outcome,
+    description: step.description,
+  }));
+
   return (
     <section
       className="bg-[var(--color-accent)] px-[8.5%] py-[30px] text-[var(--color-primary)] selection:bg-[var(--color-primary)] selection:text-[var(--color-background)] max-[700px]:px-[7%]"
@@ -21,13 +24,10 @@ export function Process() {
         <Reveal>
           <div>
             <span className="font-mono text-[10px] tracking-[0.08em] text-[var(--color-background)]">
-              THE WAY WE WORK
+              {copy.process.eyebrow}
             </span>
             <h2 className="mt-[15px] max-w-[680px] text-[clamp(50px,7vw,96px)] text-[var(--color-background)] font-medium leading-[0.88] tracking-[-0.09em]">
-              A good process makes room for{" "}
-              <em className="font-medium text-[var(--color-primary)]">
-                good work.
-              </em>
+              <SegmentedText segments={copy.process.headline} />
             </h2>
           </div>
         </Reveal>
@@ -36,14 +36,17 @@ export function Process() {
           className="justify-self-end max-[700px]:justify-self-start"
         >
           <p className="mb-[5px] max-w-[275px] justify-self-end text-[13px] leading-[1.5] max-[700px]:justify-self-start max-[700px]:text-[12px]">
-            No mystery boxes. No disappearing acts. Just clear thinking, kind
-            collaboration, and a little bit of magic along the way.
+            {copy.process.intro}
           </p>
         </Reveal>
       </div>
 
       <Reveal>
-        <ProcessInteractor items={processItems} />
+        <ProcessInteractor
+          items={processItems}
+          navLabel={copy.process.navLabel}
+          imageryLabel={copy.process.imageryLabel}
+        />
       </Reveal>
     </section>
   );

@@ -17,6 +17,7 @@ export type LiveOrbOptions = {
 export type LiveOrbProps = LiveOrbOptions & {
   className?: string;
   size?: number;
+  ariaLabel?: string;
 };
 
 const presets = {
@@ -81,6 +82,7 @@ export function LiveOrb({
   colors,
   interactive = true,
   blink = true,
+  ariaLabel = "Orb character",
 }: LiveOrbProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -193,7 +195,7 @@ export function LiveOrb({
     <div
       data-slot="live-orb"
       role="img"
-      aria-label="Orb character"
+      aria-label={ariaLabel}
       className={cn("relative shrink-0", className)}
       style={{ width: size, height: size }}
     >
