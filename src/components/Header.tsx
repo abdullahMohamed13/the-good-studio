@@ -1,12 +1,19 @@
 import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { siteConfig } from "../data/siteConfig";
+import { useI18n } from "../i18n";
+import { localizedHref, localizedPath, parsePath } from "../lib/routes";
+import { usePathname } from "../lib/usePathname";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { SegmentedText } from "./ui/SegmentedText";
 
 const navLinkClass =
-  "nav-link text-xs text-inherit no-underline transition-colors hover:text-[var(--color-accent)] focus-visible:text-[var(--color-accent)]";
+  "text-xs text-inherit no-underline transition-colors hover:border-b hover:border-dashed hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:border-b focus-visible:border-dashed focus-visible:border-[var(--color-accent)] focus-visible:text-[var(--color-accent)]";
 
 export function Header() {
-  const isHomePage = window.location.pathname === "/";
+  const { locale, copy } = useI18n();
+  const pathname = usePathname();
+  const { path } = parsePath(pathname);
+  const isHomePage = path === "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
 
@@ -22,57 +29,53 @@ export function Header() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [menuOpen]);
 
+  const sectionHref = (id: string) =>
+    isHomePage ? `#${id}` : localizedHref(locale, "/", `#${id}`);
+  const contactHref = localizedPath(locale, "/contact");
+
   return (
-    <header className="sticky top-0 z-40 flex h-[83px] items-center justify-between border-b border-dashed border-[var(--color-primary)] bg-[color-mix(in_srgb,var(--color-background)_88%,transparent)] px-[5.3%] backdrop-blur-md max-[700px]:h-[68px] max-[700px]:px-[6%]">
+    <header className="sticky top-0 z-40 flex h-[83px] items-center justify-between border-b border-dashed border-[var(--color-primary)] bg-[color-mix(in_srgb,var(--color-background)_88%,transparent)] px-[1.5%] backdrop-blur-md max-[700px]:h-[68px] max-[700px]:px-[6%]">
       <a
-        className="text-[25px] font-bold tracking-[-1.8px] text-[var(--color-primary)] no-underline"
-        href="/"
-        aria-label={`${siteConfig.name} home`}
+        className="text-[25px] tracking-[-1.8px] text-[var(--color-primary)] no-underline"
+        href={localizedPath(locale, "/")}
+        aria-label={copy.nav.homeLabel}
       >
         The Good{" "}
         <span className="ml-2 text-[var(--color-accent)]">[Studio]</span>
       </a>
-      <p className="text-xs max-[700px]:hidden">
-        Hi, stranger. Life is funny. So live it{" "}
-        <span className="underline text-[var(--color-secondary)]">Good</span>.{" "}
-        <span className="asterisk asterisk ml-[7px] align-middle text-[19px]">
-          ☼
-        </span>
-      </p>
-      <nav className="flex items-center gap-[30px] max-[700px]:hidden">
-        <a
-          className={navLinkClass}
-          href={isHomePage ? "#services" : "/#services"}
-        >
-          Services
+      <div className="hidden text-xs min-[900px]:flex flex-col items-center gap-2">
+        <div>
+          <SegmentedText segments={copy.header.tagline} />{" "}
+          <span className="asterisk ml-[7px] align-middle text-[19px]">☼</span>
+        </div>
+        <LanguageSwitcher />
+      </div>
+      <nav className="flex items-center gap-[14px] min-[1000px]:gap-[22px] max-[900px]:hidden">
+        <a className={navLinkClass} href={sectionHref("services")}>
+          {copy.nav.services}
+        </a>
+        <a className={navLinkClass} href={sectionHref("process")}>
+          {copy.nav.process}
+        </a>
+        <a className={navLinkClass} href={sectionHref("work")}>
+          {copy.nav.work}
+        </a>
+        <a className={navLinkClass} href={sectionHref("opinions")}>
+          {copy.nav.opinions}
         </a>
         <a
-          className={navLinkClass}
-          href={isHomePage ? "#process" : "/#process"}
+          className="border-b border-dashed border-current text-xs text-inherit no-underline transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          href={contactHref}
         >
-          Process
-        </a>
-        <a className={navLinkClass} href={isHomePage ? "#work" : "/#work"}>
-          Work
-        </a>
-        <a
-          className={navLinkClass}
-          href={isHomePage ? "#opinions" : "/#opinions"}
-        >
-          Opinions
-        </a>
-        <a
-          className="border-b border-current py-[9px] text-xs text-inherit no-underline transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-          href="/contact"
-        >
-          Let’s talk <b className="ml-[10px]">↗</b>
+          {copy.nav.letsTalk}
+          <b className="ml-[5px]">↗</b>
         </a>
       </nav>
       <button
         ref={menuButton}
-        className="hidden border-0 bg-transparent max-[700px]:block"
+        className="hidden border-0 bg-transparent max-[900px]:block"
         type="button"
-        aria-label={menuOpen ? "Close menu" : "Open menu"}
+        aria-label={menuOpen ? copy.nav.closeMenu : copy.nav.openMenu}
         aria-expanded={menuOpen}
         aria-controls="mobile-navigation"
         onClick={() => setMenuOpen((open) => !open)}
@@ -81,19 +84,19 @@ export function Header() {
       </button>
       <nav
         id="mobile-navigation"
-        aria-label="Mobile navigation"
-        className={`${menuOpen ? "flex" : "hidden"} absolute left-0 right-0 top-[68px] z-30 flex-col border-b border-dashed border-[var(--color-primary)] bg-[var(--color-background)] px-[6%] py-4 min-[701px]:hidden`}
+        aria-label={copy.nav.mobileLabel}
+        className={`${menuOpen ? "flex" : "hidden"} absolute left-0 right-0 top-[83px] z-30 flex-col border-b border-dashed border-[var(--color-primary)] bg-[var(--color-background)] px-[6%] py-4 max-[700px]:top-[68px] min-[901px]:hidden`}
       >
         {[
-          ["Services", "services"],
-          ["Process", "process"],
-          ["Work", "work"],
-          ["Opinions", "opinions"],
+          [copy.nav.services, "services"],
+          [copy.nav.process, "process"],
+          [copy.nav.work, "work"],
+          [copy.nav.opinions, "opinions"],
         ].map(([label, id]) => (
           <a
             key={id}
             className="border-b border-dashed border-[var(--color-primary)] py-3 text-sm text-inherit no-underline"
-            href={isHomePage ? `#${id}` : `/#${id}`}
+            href={sectionHref(id)}
             onClick={() => setMenuOpen(false)}
           >
             {label}
@@ -101,11 +104,14 @@ export function Header() {
         ))}
         <a
           className="py-3 text-sm text-inherit no-underline"
-          href="/contact"
+          href={contactHref}
           onClick={() => setMenuOpen(false)}
         >
-          Contact ↗
+          {copy.nav.contact} ↗
         </a>
+        <div className="mt-2 border-t border-dashed border-[var(--color-primary)] pt-1">
+          <LanguageSwitcher variant="mobile" />
+        </div>
       </nav>
     </header>
   );
