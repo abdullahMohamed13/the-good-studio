@@ -57,4 +57,12 @@
   .asterisk {
     color: var(--color-accent);
   }
+
+  .contact-field {
+    @apply block w-full border border-dashed border-secondary bg-transparent px-[7px] py-[7px] font-mono text-[9px] text-primary outline-none placeholder:text-secondary placeholder:opacity-60 focus:border-solid;
+  }
+
+  .contact-chip {
+    @apply cursor-pointer rounded-[2px] border border-dashed border-[var(--color-secondary)] px-[8px] py-[7px] font-mono text-[9px] text-[var(--color-primary)] has-[:checked]:border-solid has-[:checked]:bg-[var(--color-accent)] has-[:checked]:text-[var(--color-background)];
+  }
 }
