@@ -79,9 +79,14 @@ export function Testimonials() {
                       {q.quote}
                     </p>
                     <div className="mt-auto flex items-center gap-[11px]">
-                      <span className="grid h-[33px] w-[33px] place-items-center rounded-full bg-[var(--color-accent)] font-serif text-base text-[var(--color-background)]">
-                        {q.name[0]}
-                      </span>
+                      <img
+                        className="h-[33px] w-[33px] shrink-0 rounded-full object-cover"
+                        src={q.avatar}
+                        alt={`${q.name} avatar`}
+                        width={33}
+                        height={33}
+                        loading="lazy"
+                      />
                       <div className="flex flex-col gap-1">
                         <b className="font-mono text-[9px]">{q.name}</b>
                         <small className="font-mono text-[9px] opacity-60">
