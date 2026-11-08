@@ -119,26 +119,6 @@
   will-change: auto;
 }
 
-.nav-link {
-  position: relative;
-}
-
-.nav-link::after {
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  height: 1px;
-  width: 0;
-  background: var(--color-accent);
-  content: "";
-  transition: width 260ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.nav-link:hover::after,
-.nav-link:focus-visible::after {
-  width: 100%;
-}
-
 .testimonials-slide-next,
 .testimonials-slide-previous {
   animation-duration: 280ms;
@@ -182,10 +162,6 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
-  }
-
-  .nav-link::after {
-    transition: none;
   }
 
   .testimonials-slide-next,
