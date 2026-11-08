@@ -14,9 +14,16 @@ export interface ProcessVisualItem {
 interface ComponentProps {
   items: ProcessVisualItem[];
   className?: string;
+  navLabel: string;
+  imageryLabel: string;
 }
 
-export function ProcessInteractor({ items, className }: ComponentProps) {
+export function ProcessInteractor({
+  items,
+  className,
+  navLabel,
+  imageryLabel,
+}: ComponentProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<SVGImageElement>(null);
@@ -32,7 +39,10 @@ export function ProcessInteractor({ items, className }: ComponentProps) {
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
-      gsap.set(shapes, { scale: reducedMotion ? 1 : 0, transformOrigin: "50% 50%" });
+      gsap.set(shapes, {
+        scale: reducedMotion ? 1 : 0,
+        transformOrigin: "50% 50%",
+      });
       if (reducedMotion) return;
 
       timelineRef.current = gsap
@@ -79,7 +89,10 @@ export function ProcessInteractor({ items, className }: ComponentProps) {
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    gsap.set(shapes, { scale: reducedMotion ? 1 : 0, transformOrigin: "50% 50%" });
+    gsap.set(shapes, {
+      scale: reducedMotion ? 1 : 0,
+      transformOrigin: "50% 50%",
+    });
     if (reducedMotion) return;
 
     timelineRef.current = gsap
@@ -117,7 +130,7 @@ export function ProcessInteractor({ items, className }: ComponentProps) {
         className,
       )}
     >
-      <nav aria-label="Our process">
+      <nav aria-label={navLabel}>
         <ul className="flex flex-col gap-8 md:gap-10">
           {items.map((item, index) => (
             <li key={item.num}>
@@ -181,26 +194,90 @@ export function ProcessInteractor({ items, className }: ComponentProps) {
 
       <div className="relative mx-auto w-full max-w-[430px]">
         <div className="absolute inset-10 rounded-full bg-[var(--color-background)]/20 blur-3xl" />
-        <svg viewBox="0 0 500 500" role="img" aria-label={`${activeItem.name} process imagery`} className="relative z-10 h-auto w-full drop-shadow-xl">
+        <svg
+          viewBox="0 0 500 500"
+          role="img"
+          aria-label={imageryLabel.replace("{name}", activeItem.name)}
+          className="relative z-10 h-auto w-full drop-shadow-xl"
+        >
           <defs>
             <clipPath id="process-step-0">
               <path className="path" d="M480 235H20v-30h460z" />
               <path className="path" d="M483 362H17v-20h466z" />
-              <path className="path" d="M460 336H40a31 31 0 0 1 0-62h420a31 31 0 0 1 0 62" />
-              <path className="path" d="M459 196H41v-35a86 86 0 0 1 86-86h246a86 86 0 0 1 86 86z" />
-              <path className="path" d="M459 370v38a17 17 0 0 1-17 17H58a17 17 0 0 1-17-17v-38z" />
+              <path
+                className="path"
+                d="M460 336H40a31 31 0 0 1 0-62h420a31 31 0 0 1 0 62"
+              />
+              <path
+                className="path"
+                d="M459 196H41v-35a86 86 0 0 1 86-86h246a86 86 0 0 1 86 86z"
+              />
+              <path
+                className="path"
+                d="M459 370v38a17 17 0 0 1-17 17H58a17 17 0 0 1-17-17v-38z"
+              />
             </clipPath>
             <clipPath id="process-step-1">
-              <rect className="path" x="20" y="20" width="200" height="280" rx="12" />
-              <rect className="path" x="20" y="320" width="200" height="160" rx="12" />
-              <rect className="path" x="240" y="20" width="240" height="140" rx="12" />
-              <rect className="path" x="240" y="180" width="110" height="160" rx="12" />
-              <rect className="path" x="370" y="180" width="110" height="160" rx="12" />
-              <rect className="path" x="240" y="360" width="240" height="120" rx="12" />
+              <rect
+                className="path"
+                x="20"
+                y="20"
+                width="200"
+                height="280"
+                rx="12"
+              />
+              <rect
+                className="path"
+                x="20"
+                y="320"
+                width="200"
+                height="160"
+                rx="12"
+              />
+              <rect
+                className="path"
+                x="240"
+                y="20"
+                width="240"
+                height="140"
+                rx="12"
+              />
+              <rect
+                className="path"
+                x="240"
+                y="180"
+                width="110"
+                height="160"
+                rx="12"
+              />
+              <rect
+                className="path"
+                x="370"
+                y="180"
+                width="110"
+                height="160"
+                rx="12"
+              />
+              <rect
+                className="path"
+                x="240"
+                y="360"
+                width="240"
+                height="120"
+                rx="12"
+              />
             </clipPath>
             <clipPath id="process-step-2">
               {Array.from({ length: 9 }).map((_, i) => (
-                <rect key={i} className="path" x={(i % 3) * 160 + 20} y={Math.floor(i / 3) * 160 + 20} width="140" height="140" rx="4" />
+                <rect
+                  key={i}
+                  className="path"
+                  x={(i % 3) * 160 + 20}
+                  y={Math.floor(i / 3) * 160 + 20}
+                  width="140"
+                  height="140"
+                  rx="4"
+                />
               ))}
             </clipPath>
             <clipPath id="process-step-3">
@@ -210,7 +287,13 @@ export function ProcessInteractor({ items, className }: ComponentProps) {
             </clipPath>
           </defs>
           <g ref={mainGroupRef} clipPath={`url(#${items[0]?.clipId})`}>
-            <image ref={imageRef} href={items[0]?.image} width="500" height="500" preserveAspectRatio="xMidYMid slice" />
+            <image
+              ref={imageRef}
+              href={items[0]?.image}
+              width="500"
+              height="500"
+              preserveAspectRatio="xMidYMid slice"
+            />
           </g>
         </svg>
       </div>

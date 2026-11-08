@@ -1,4 +1,6 @@
-import { startingPoints, type StartingPoint } from "../data/contactForm";
+import { useI18n } from "../i18n";
+import { getStartingPoints } from "../i18n/content";
+import type { StartingPoint } from "../data/contactForm";
 
 type StartingPointPickerProps = {
   value: StartingPoint;
@@ -9,6 +11,9 @@ export function StartingPointPicker({
   value,
   onChange,
 }: StartingPointPickerProps) {
+  const { locale } = useI18n();
+  const startingPoints = getStartingPoints(locale);
+
   return (
     <div className="flex flex-wrap gap-[6px]">
       {startingPoints.map((point) => {

@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { testimonials } from "../data/testimonials";
+import { useI18n } from "../i18n";
+import { getTestimonials } from "../i18n/content";
 import { Reveal } from "../components/animations/Reveal";
+import { SegmentedText } from "../components/ui/SegmentedText";
 
 export function Testimonials() {
+  const { locale, copy } = useI18n();
+  const testimonials = getTestimonials(locale);
   const [startIndex, setStartIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState<"next" | "previous">(
     "next",
@@ -40,17 +44,17 @@ export function Testimonials() {
         <div className="mb-[43px] flex items-end justify-between max-[700px]:items-start">
           <div>
             <span className="font-mono text-[10px] tracking-[0.08em]">
-              KIND WORDS, REAL HUMANS
+              {copy.testimonials.eyebrow}
             </span>
             <h2 className="mt-[15px] text-[clamp(48px,7vw,92px)] font-medium leading-[0.9] tracking-[-0.08em] max-[700px]:text-[56px]">
-              People <em>talk</em>
+              <SegmentedText segments={copy.testimonials.headline} />
               <span className="asterisk">*</span>
             </h2>
           </div>
           <p className="mb-[5px] mr-[2%] text-[13px] leading-[1.5] max-[700px]:mt-6 max-[700px]:text-[11px]">
-            <span className="asterisk">✳</span> The calm authority of
+            <span className="asterisk">✳</span> {copy.testimonials.noteLine1}
             <br />
-            real human feedback.
+            {copy.testimonials.noteLine2}
           </p>
         </div>
       </Reveal>
@@ -70,7 +74,7 @@ export function Testimonials() {
                 return (
                   <article
                     className="flex min-h-[260px] flex-col border-t border-[var(--color-accent)] border-dashed py-5 pr-5 pb-3 transition-transform duration-300 hover:-translate-y-1 max-[700px]:min-h-[215px]"
-                    key={q.name}
+                    key={q.id}
                   >
                     <span className="h-[55px] font-serif text-[60px] text-[var(--color-primary)]">
                       “
@@ -82,7 +86,10 @@ export function Testimonials() {
                       <img
                         className="h-[33px] w-[33px] shrink-0 rounded-full object-cover"
                         src={q.avatar}
-                        alt={`${q.name} avatar`}
+                        alt={copy.testimonials.avatarAlt.replace(
+                          "{name}",
+                          q.name,
+                        )}
                         width={33}
                         height={33}
                         loading="lazy"
@@ -112,7 +119,7 @@ export function Testimonials() {
                 className="grid h-[38px] w-[38px] cursor-pointer place-items-center rounded-full border border-[#20201d55] bg-transparent text-[var(--color-primary)] transition-colors duration-[180ms] hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-background)]"
                 type="button"
                 onClick={showPrevious}
-                aria-label="Show previous testimonials"
+                aria-label={copy.testimonials.previous}
               >
                 <ChevronLeft size={17} strokeWidth={1.5} />
               </button>
@@ -120,7 +127,7 @@ export function Testimonials() {
                 className="grid h-[38px] w-[38px] cursor-pointer place-items-center rounded-full border border-[#20201d55] bg-transparent text-[var(--color-primary)] transition-colors duration-[180ms] hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-background)]"
                 type="button"
                 onClick={showNext}
-                aria-label="Show next testimonials"
+                aria-label={copy.testimonials.next}
               >
                 <ChevronRight size={17} strokeWidth={1.5} />
               </button>

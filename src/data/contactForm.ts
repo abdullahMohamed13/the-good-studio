@@ -1,48 +1,38 @@
-export const interests = [
-  "Website Design",
-  "Squarespace Development",
-  "Shopify Development",
-  "Web Development (Other)",
-  "Collaboration",
-  "Site Maintenance",
-  "Studio Day",
-  "Brand Identity",
-  "Something Else",
-];
+export const interestMeta = [
+  { id: "website-design" },
+  { id: "squarespace-development" },
+  { id: "shopify-development" },
+  { id: "web-development-other" },
+  { id: "collaboration" },
+  { id: "site-maintenance" },
+  { id: "studio-day" },
+  { id: "brand-identity" },
+  { id: "something-else" },
+] as const;
 
-export const assets = ["Copy", "Photography / Videos", "Branding Style"];
+export type InterestId = (typeof interestMeta)[number]["id"];
 
-export const collaborationTypes = [
-  "Creative partnership",
-  "Guest talk",
-  "Studio day",
-  "Something else",
-];
+export const assetMeta = [
+  { id: "copy" },
+  { id: "photography" },
+  { id: "branding" },
+] as const;
 
-export type StartingPoint = "project" | "collaboration" | "hello";
+export type AssetId = (typeof assetMeta)[number]["id"];
 
-export const startingPoints: {
-  id: StartingPoint;
-  label: string;
-  subject: string;
-  submitLabel: string;
-}[] = [
-  {
-    id: "project",
-    label: "New project",
-    subject: "New project enquiry",
-    submitLabel: "Send enquiry",
-  },
-  {
-    id: "collaboration",
-    label: "Collaboration",
-    subject: "Collaboration enquiry",
-    submitLabel: "Send note",
-  },
-  {
-    id: "hello",
-    label: "Just saying hi",
-    subject: "Hello!",
-    submitLabel: "Say hello",
-  },
-];
+export const collaborationTypeMeta = [
+  { id: "creative-partnership" },
+  { id: "guest-talk" },
+  { id: "studio-day" },
+  { id: "something-else" },
+] as const;
+
+export type CollaborationTypeId = (typeof collaborationTypeMeta)[number]["id"];
+
+export const startingPointMeta = [
+  { id: "project" },
+  { id: "collaboration" },
+  { id: "hello" },
+] as const;
+
+export type StartingPoint = (typeof startingPointMeta)[number]["id"];

@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles/style.css";
 import "./styles/motion.css";
@@ -13,14 +13,27 @@ import { Services } from "./sections/Services";
 import { Process } from "./sections/Process";
 import { ChatbotOrb } from "./components/ChatbotOrb";
 import { ScrollProgress } from "./components/ui/ScrollProgress";
+import { LocaleProvider } from "./i18n";
+import { detectLocaleFromClient } from "./lib/locale";
+import { localizedPath, parsePath } from "./lib/routes";
+import { navigate, usePathname } from "./lib/usePathname";
 
 function App() {
-  const isContactRoute =
-    window.location.pathname === "/contact" ||
-    window.location.pathname === "/contact/";
+  const pathname = usePathname();
+  const parsed = parsePath(pathname);
+  const locale = parsed.locale ?? detectLocaleFromClient();
+  const isContactRoute = parsed.path === "/contact";
+
+  useEffect(() => {
+    if (parsed.locale) return;
+
+    navigate(localizedPath(locale, parsed.path) + window.location.hash, {
+      replace: true,
+    });
+  }, [locale, parsed.locale, parsed.path]);
 
   return (
-    <>
+    <LocaleProvider locale={locale}>
       <ScrollProgress />
       <Header />
       <main>
@@ -39,9 +52,10 @@ function App() {
       </main>
       <Footer />
       <ChatbotOrb />
-    </>
+    </LocaleProvider>
   );
 }
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />

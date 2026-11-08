@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import type { StartingPoint } from "../data/contactForm";
 import {
-  assets,
-  collaborationTypes,
-  interests,
-  startingPoints,
-  type StartingPoint,
-} from "../data/contactForm";
+  getAssets,
+  getCollaborationTypes,
+  getInterests,
+  getStartingPoints,
+} from "../i18n/content";
+import { useI18n } from "../i18n";
 import { StartingPointPicker } from "../components/StartingPointPicker";
 import { WanderingEyes } from "../components/ui/wandering-eyes";
 
@@ -26,6 +27,12 @@ export function ContactForm({
   startingPoint,
   onStartingPointChange,
 }: ContactFormProps) {
+  const { locale, copy } = useI18n();
+  const form = copy.contact.form;
+  const interests = getInterests(locale);
+  const assets = getAssets(locale);
+  const collaborationTypes = getCollaborationTypes(locale);
+  const startingPoints = getStartingPoints(locale);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [toastState, setToastState] = useState<
@@ -74,7 +81,7 @@ export function ContactForm({
       >
         <div className="min-[701px]:hidden">
           <span className="mb-[6px] block font-mono text-[8px] uppercase tracking-[0.06em] text-[var(--color-secondary)]">
-            Start with
+            {form.startWith}
           </span>
           <StartingPointPicker
             value={startingPoint}
@@ -82,21 +89,21 @@ export function ContactForm({
           />
         </div>
         <label className="block">
-          <FieldLabel>Name</FieldLabel>
+          <FieldLabel>{form.name}</FieldLabel>
           <input
             className="contact-field"
             name="Name"
-            placeholder="Name"
+            placeholder={form.namePlaceholder}
             required
             autoComplete="name"
           />
         </label>
         <label className="block">
-          <FieldLabel>Email</FieldLabel>
+          <FieldLabel>{form.email}</FieldLabel>
           <input
             className="contact-field"
             type="email"
-            placeholder="good-person@gmail.com"
+            placeholder={form.emailPlaceholder}
             name="Email"
             required
             autoComplete="email"
@@ -108,41 +115,41 @@ export function ContactForm({
             type="checkbox"
             name="Newsletter"
           />{" "}
-          Sign up for news and updates
+          {form.newsletter}
         </label>
 
         {startingPoint === "project" && (
           <>
             <fieldset className="border-0 p-0">
               <legend className="mb-[8px] font-mono text-[24px] uppercase leading-tight text-[var(--color-secondary)] max-[700px]:text-[19px]">
-                I’m interested in...{" "}
+                {form.interestsLegend}{" "}
                 <i className="asterisk text-[14px] not-italic opacity-90">*</i>
               </legend>
               <div className="flex flex-wrap gap-[10px]">
                 {interests.map((interest) => (
-                  <label key={interest} className="contact-chip">
+                  <label key={interest.id} className="contact-chip">
                     <input
                       className="peer sr-only"
                       type="checkbox"
                       name="Interest"
-                      value={interest}
+                      value={interest.id}
                     />
-                    {interest}
+                    {interest.label}
                   </label>
                 ))}
               </div>
             </fieldset>
 
             <label className="block">
-              <FieldLabel>What’s your budget?</FieldLabel>
+              <FieldLabel>{form.budget}</FieldLabel>
               <span className="flex w-[136px] items-center border border-dashed border-[var(--color-secondary)] px-[7px] font-mono text-[9px]">
-                <span>$</span>
+                <span>{form.budgetCurrency}</span>
                 <input
                   className="w-full border-0 bg-transparent px-1 py-[7px] font-mono text-[9px] text-[var(--color-primary)] outline-none"
                   type="number"
                   name="Budget"
                   min="0"
-                  aria-label="Budget in USD"
+                  aria-label={form.budgetAria}
                 />
               </span>
             </label>
@@ -152,19 +159,19 @@ export function ContactForm({
         {startingPoint === "collaboration" && (
           <fieldset className="border-0 p-0">
             <legend className="mb-[8px] font-mono text-[24px] uppercase leading-tight text-[var(--color-secondary)] max-[700px]:text-[19px]">
-              How could we work together?{" "}
+              {form.collaborationLegend}{" "}
               <i className="asterisk text-[14px] not-italic opacity-90">*</i>
             </legend>
             <div className="flex flex-wrap gap-[10px]">
               {collaborationTypes.map((type) => (
-                <label key={type} className="contact-chip">
+                <label key={type.id} className="contact-chip">
                   <input
                     className="peer sr-only"
                     type="checkbox"
                     name="Collaboration type"
-                    value={type}
+                    value={type.id}
                   />
-                  {type}
+                  {type.label}
                 </label>
               ))}
             </div>
@@ -172,13 +179,7 @@ export function ContactForm({
         )}
 
         <label className="block">
-          <FieldLabel>
-            {startingPoint === "hello"
-              ? "Your message"
-              : startingPoint === "collaboration"
-                ? "What are you working on?"
-                : "Project details"}
-          </FieldLabel>
+          <FieldLabel>{form.messageLabels[startingPoint]}</FieldLabel>
           <textarea
             className="contact-field min-h-[68px] resize-y"
             name={
@@ -188,13 +189,7 @@ export function ContactForm({
                   ? "Collaboration details"
                   : "Project details"
             }
-            placeholder={
-              startingPoint === "hello"
-                ? "A note, a thought, a hello — anything goes."
-                : startingPoint === "collaboration"
-                  ? "Tell us what you’re making and how you’d like to work together."
-                  : "Describe your project in detail including deadlines."
-            }
+            placeholder={form.messagePlaceholders[startingPoint]}
             required
           />
         </label>
@@ -202,19 +197,19 @@ export function ContactForm({
         {startingPoint === "project" && (
           <fieldset className="border-0 p-0">
             <legend className="mb-[8px] font-mono text-[24px] uppercase leading-tight text-[var(--color-secondary)] max-[700px]:text-[19px]">
-              I already have{" "}
+              {form.assetsLegend}{" "}
               <i className="asterisk text-[14px] not-italic opacity-90">*</i>
             </legend>
             <div className="flex flex-wrap gap-[10px]">
               {assets.map((asset) => (
-                <label key={asset} className="contact-chip">
+                <label key={asset.id} className="contact-chip">
                   <input
                     className="sr-only"
                     type="checkbox"
                     name="Already have"
-                    value={asset}
+                    value={asset.id}
                   />
-                  {asset}
+                  {asset.label}
                 </label>
               ))}
             </div>
@@ -223,13 +218,11 @@ export function ContactForm({
 
         {startingPoint !== "hello" && (
           <label className="block">
-            <FieldLabel>
-              Expressing gratitude &amp; giving back to friends
-            </FieldLabel>
+            <FieldLabel>{form.referralLegend}</FieldLabel>
             <input
               className="contact-field"
               name="Referral"
-              placeholder="How did you hear about me?"
+              placeholder={form.referralPlaceholder}
             />
           </label>
         )}
@@ -244,7 +237,7 @@ export function ContactForm({
               isSubmitting ? "opacity-0" : "opacity-100"
             }`}
           >
-            {activePoint.submitLabel}
+            {activePoint?.submitLabel}
           </span>
           {isSubmitting && (
             <WanderingEyes
@@ -263,7 +256,7 @@ export function ContactForm({
           role="status"
           aria-live="polite"
         >
-          We got your message
+          {form.toast}
         </div>
       )}
     </>
