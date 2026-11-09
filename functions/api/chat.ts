@@ -1,4 +1,4 @@
-import { siteConfig } from "../../src/data/siteConfig";
+import { creator, siteConfig } from "../../src/data/siteConfig";
 import {
   getAssets,
   getCollaborationTypes,
@@ -55,8 +55,8 @@ function buildStudioKnowledge(locale: Locale) {
     "The studio is an independent design studio based everywhere.",
     "The studio makes visual design and web development for phenomenal humans.",
     "The studio is coded and designed by humans, backed by instinct and intuition.",
-    "This project was created and designed by Abdallah Mohamed Aziz.",
-    "Abdallah Mohamed Aziz's LinkedIn profile is https://www.linkedin.com/in/abdallah-m-aziz/.",
+    `This project was created and designed by ${creator.name}.`,
+    `${creator.name}'s LinkedIn profile is ${creator.linkedIn}.`,
     `Services: ${services.map((service) => `${service.title} — ${service.description} (${service.tags})`).join("; ")}`,
     `Process: ${processSteps.map((step) => `${step.number}. ${step.title} — ${step.description} Outcome: ${step.outcome}`).join("; ")}`,
     `Selected work: ${workMedia.map((project) => `${project.name} (${project.type})`).join(", ")}.`,
@@ -80,10 +80,35 @@ function buildSystemMessage(locale: Locale, copy: Dictionary): ChatMessage {
   return {
     role: "system",
     content: `You are Good Bot, the warm and concise assistant for The Good Studio.
-Answer questions about the studio using only the information below. Reply in ${languageName}. Keep replies human, helpful, and under 80 words. If you do not know something, say so clearly. Never invent services, clients, prices, results, or availability. Do not use Markdown, asterisks, or bullet points. Use plain text and numbered lines for lists.
+Answer questions about the studio using only the information below. Reply in ${languageName}. Keep replies human, helpful, and under 80 words. If you do not know something, say so clearly. Never invent services, clients, prices, results, or availability. Do not use Markdown, asterisks, or bullet points. Use plain text and numbered lines for lists. If asked who created, made, designed, or built this website, or who the creator is, name ${creator.name}.
 
 ${buildStudioKnowledge(locale)}`,
   };
+}
+
+function asksAboutCreator(content: string) {
+  const normalized = content
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  return (
+    /\b(creator|founder|abdallah)\b/.test(normalized) ||
+    /\bwho (made|built|created|designed|developed|coded|is behind)\b/.test(
+      normalized,
+    ) ||
+    /\bwho(?:'s| is) the (creator|founder|owner|designer|developer|author)\b/.test(
+      normalized,
+    ) ||
+    /\bqui a (fait|cree|concu|developpe|code)\b/.test(normalized) ||
+    /\bqui est (le|la) (createur|creatrice|fondateur|fondatrice|designer|developpeur|developpeuse|auteur|autrice)\b/.test(
+      normalized,
+    ) ||
+    /\bquien (hizo|creo|diseno|desarrollo|programo)\b/.test(normalized) ||
+    /\bquien es (el|la) (creador|creadora|fundador|fundadora|disenador|disenadora|desarrollador|desarrolladora|autor|autora)\b/.test(
+      normalized,
+    )
+  );
 }
 
 let rateWindowStarted = 0;
@@ -191,7 +216,19 @@ export async function onRequestPost({
       return json({ error: copy.chatbot.errors.noAnswer }, 502);
     }
 
-    return json({ response });
+    const firstName = creator.name.split(" ")[0].toLowerCase();
+    const mentionsCreator = response.toLowerCase().includes(firstName);
+    const latestUserMessage = messages[messages.length - 1];
+    const askedAboutCreator = Boolean(
+      latestUserMessage && asksAboutCreator(latestUserMessage.content),
+    );
+
+    return json({
+      response,
+      ...(askedAboutCreator || mentionsCreator
+        ? { photo: creator.photo, photoAlt: copy.chatbot.creatorPhotoAlt }
+        : {}),
+    });
   } catch (error) {
     console.error("Chatbot request failed", error);
     return json({ error: copy.chatbot.errors.serviceUnavailable }, 503);

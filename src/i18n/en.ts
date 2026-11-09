@@ -356,6 +356,7 @@ const en: Dictionary = {
     inputLabel: "Chat message",
     send: "Send ↗",
     orbAlt: "Orb character",
+    creatorPhotoAlt: "Portrait of Abdallah Mohamed Aziz",
     errors: {
       timeout: "That took too long. Please try again, or reach us at /contact.",
       unavailable: "The orb could not answer right now.",

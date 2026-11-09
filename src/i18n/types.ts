@@ -174,6 +174,7 @@ export type Dictionary = {
     inputLabel: string;
     send: string;
     orbAlt: string;
+    creatorPhotoAlt: string;
     errors: {
       timeout: string;
       unavailable: string;

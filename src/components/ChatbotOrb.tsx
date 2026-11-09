@@ -6,6 +6,10 @@ import { LiveOrb } from "./ui/live-orb";
 type ChatMessage = {
   role: "user" | "assistant";
   content: string;
+  image?: {
+    src: string;
+    alt: string;
+  };
 };
 
 function formatAssistantText(content: string) {
@@ -72,6 +76,8 @@ export function ChatbotOrb() {
       });
       const data = (await response.json().catch(() => null)) as {
         response?: string;
+        photo?: string;
+        photoAlt?: string;
         error?: string;
       } | null;
 
@@ -88,7 +94,14 @@ export function ChatbotOrb() {
 
       setMessages((current) => [
         ...current,
-        { role: "assistant", content: data.response! },
+        {
+          role: "assistant",
+          content: data.response!,
+          image:
+            data.photo && data.photoAlt
+              ? { src: data.photo, alt: data.photoAlt }
+              : undefined,
+        },
       ]);
     } catch (error) {
       setMessages((current) => [
@@ -139,20 +152,33 @@ export function ChatbotOrb() {
         </div>
 
         <div className="flex min-h-[150px] flex-col gap-3 overflow-y-auto p-4 font-mono text-[10px] leading-[1.45]">
-          {messages.map((message, index) => (
-            <p
-              className={
-                message.role === "user"
-                  ? "self-end border border-dashed border-[var(--color-accent)] px-2 py-1 text-right"
-                  : "max-w-[245px] whitespace-pre-line border-l-2 border-[var(--color-secondary)] pl-2"
-              }
-              key={`${message.role}-${index}`}
-            >
-              {message.role === "assistant"
-                ? formatAssistantText(message.content)
-                : message.content}
-            </p>
-          ))}
+          {messages.map((message, index) =>
+            message.role === "user" ? (
+              <p
+                className="self-end border border-dashed border-[var(--color-accent)] px-2 py-1 text-right"
+                key={`${message.role}-${index}`}
+              >
+                {message.content}
+              </p>
+            ) : (
+              <div
+                className="max-w-[245px] border-l-2 border-[var(--color-secondary)] pl-2"
+                key={`${message.role}-${index}`}
+              >
+                <p className="whitespace-pre-line">
+                  {formatAssistantText(message.content)}
+                </p>
+                {message.image && (
+                  <img
+                    className="mt-2 w-full border border-dashed border-[var(--color-primary)] object-cover"
+                    src={message.image.src}
+                    alt={message.image.alt}
+                    loading="lazy"
+                  />
+                )}
+              </div>
+            ),
+          )}
           {isLoading && (
             <p className="border-l-2 border-[var(--color-secondary)] pl-2 opacity-60">
               {copy.chatbot.thinking}

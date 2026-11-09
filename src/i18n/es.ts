@@ -406,6 +406,7 @@ const es: Dictionary = {
     inputLabel: "Mensaje del chat",
     send: "Enviar ↗",
     orbAlt: "Personaje orbe",
+    creatorPhotoAlt: "Retrato de Abdallah Mohamed Aziz",
     errors: {
       timeout: "Tardó demasiado. Inténtalo de nuevo o escríbenos en /contact.",
       unavailable: "El orbe no puede responder ahora mismo.",
