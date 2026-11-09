@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting to The Good Studio</title>
+  <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+  <p id="message">Redirecting to The Good Studio...</p>
+
+  <script>
+    const destinations = {
+      mysite: "https://the-good-studio.abdullah-229op.workers.dev"
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const key = params.get("redirect");
+    const destination = destinations[key];
+
+    if (destination) {
+      window.location.replace(destination);
+    } else {
+      document.getElementById("message").textContent =
+        "Invalid or missing redirect destination.";
+    }
+  </script>
+</body>
+</html>
