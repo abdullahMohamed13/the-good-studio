@@ -170,7 +170,7 @@ export function ChatbotOrb() {
                 </p>
                 {message.image && (
                   <img
-                    className="mt-2 w-full border border-dashed border-[var(--color-primary)] object-cover"
+                    className="mt-2 h-16 w-16 rounded-full border border-dashed border-[var(--color-primary)] object-cover"
                     src={message.image.src}
                     alt={message.image.alt}
                     loading="lazy"
